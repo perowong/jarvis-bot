@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "script": "node ./dist/jarvis.js",
+      "name": "jarvis-bot",
+      "instances": "1",
+      "exec_mode": "cluster",
+      "env": {}
+    }
+  ]
+}

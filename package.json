@@ -1,0 +1,40 @@
+{
+  "name": "jarvis-bot",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "engines": {
+    "node": ">=16",
+    "npm": ">=7"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "shx rm -fr dist/*",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged",
+    "start": "cross-env NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" node src/bot.ts",
+    "start:chat:info": "cross-env CHAT_LOG_MODE=info NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" node src/bot.ts",
+    "start:wechat:padlocal": "cross-env WECHATY_LOG=verbose WECHATY_PUPPET=wechaty-puppet-padlocal npm start",
+    "gpt": "cross-env NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" node src/gpt.ts",
+    "test": "cross-env NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" tap \"src/**/*.spec.ts\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^3.2.1",
+    "qrcode-terminal": "^0.12.0",
+    "wechaty": "^1.20.2",
+    "wechaty-puppet": "^1.19.6",
+    "wechaty-puppet-padlocal": "^1.11.18"
+  },
+  "devDependencies": {
+    "@chatie/tsconfig": "^4.6.3",
+    "@types/qrcode-terminal": "^0.12.0",
+    "cross-env": "^7.0.3",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.0",
+    "prettier": "^2.6.2"
+  }
+}
