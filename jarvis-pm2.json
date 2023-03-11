@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "script": "node ./dist/jarvis.js",
+      "script": "node ./dist/bot.js",
       "name": "jarvis-bot",
       "instances": "1",
       "exec_mode": "cluster",
