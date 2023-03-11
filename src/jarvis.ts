@@ -1,12 +1,10 @@
 import { log } from "wechaty";
 import type { Message, Sayable } from "wechaty";
 import type { WechatyInterface } from "wechaty/impls";
-import HttpsProxyAgent from "https-proxy-agent";
-import { openai } from "./gpt.js";
+import { openai, httpAgent } from "./gpt.js";
 import { readConf } from "./conf.js";
 
 const conf = await readConf();
-const httpAgent = HttpsProxyAgent(`http://${conf["proxy"]}`);
 
 export interface JarvisParams {
   msg: Message
