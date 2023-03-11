@@ -1,9 +1,7 @@
-#!/usr/bin/env -S node --no-warnings --loader ts-node/esm
-
 import { Configuration, OpenAIApi } from "openai";
-// import axios from 'axios';
-import { log } from "wechaty-puppet";
 import { readConf } from "./conf.js";
+import HttpsProxyAgent from "https-proxy-agent";
+import { log } from "wechaty";
 
 const conf = await readConf();
 
@@ -12,39 +10,30 @@ const configuration = new Configuration({
   apiKey: conf["openaiApiKey"]
 });
 
-// const gptAxios = axios.create({
-//   proxy: {
-//     host: "127.0.0.1",
-//     port: 1080,
-//     protocol: "socket5"
-//   },
-//   timeout: 5000
-// });
-
 export const openai = new OpenAIApi(configuration);
 
-const [host, port] = conf["proxy"].split(":");
+const httpAgent = HttpsProxyAgent(`http://${conf["proxy"]}`);
 try {
-  const completion = await openai.createCompletion(
+  const completion = await openai.createChatCompletion(
     {
       model: "gpt-3.5-turbo",
-      prompt: "Hello world"
+      messages: [{
+        role: "user",
+        content: "Who won the world series in 2020?"
+      }],
+      max_tokens: conf["conversationMaxTokens"]
     },
     {
-      proxy: {
-        host,
-        port,
-        protocol: "socket5"
-      },
-      timeout: 5000
+      httpAgent: httpAgent,
+      httpsAgent: httpAgent
     }
   );
-  log.info(completion.data.choices[0]?.text as string);
+  log.info(completion.data.choices[0]?.message?.content as string);
 } catch (error: any) {
   if (error.response) {
-    log.error(error.response.status);
-    log.error(error.response.data);
+    log.error("[gpt]", error.response.status);
+    log.error("[gpt]", JSON.stringify(error.response.data));
   } else {
-    log.error(error.message);
+    log.error("[gpt]", error.message);
   }
 }

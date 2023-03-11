@@ -3,7 +3,7 @@
 import "dotenv/config.js";
 
 import { Contact, Message, ScanStatus, WechatyBuilder, log } from "wechaty";
-import { generate } from "qrcode-terminal";
+import qt from "qrcode-terminal";
 import PuppetPadlocal from "wechaty-puppet-padlocal";
 
 import { jarvis } from "./jarvis.js";
@@ -20,7 +20,7 @@ function onScan(qrcode: string, status: ScanStatus) {
     const qrcodeImageUrl = ["https://wechaty.js.org/qrcode/", encodeURIComponent(qrcode)].join("");
     log.info("StarterBot", "onScan: %s(%s) - %s", ScanStatus[status], status, qrcodeImageUrl);
 
-    generate(qrcode, { small: true }); // show qrcode on console
+    qt.generate(qrcode, { small: true }); // show qrcode on console
   } else {
     log.info("StarterBot", "onScan: %s(%s)", ScanStatus[status], status);
   }

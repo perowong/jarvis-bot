@@ -6,6 +6,6 @@
   "chatPrefix": "@Jarvis",
   "singleChatReplyPrefix": "[Jarvis] ",
   "groupNameWhiteList": ["Chat@Jarvis", "ChatGPT@Jarvis"],
-  "conversationMaxTokens": 1000,
+  "conversationMaxTokens": 1024,
   "characterDesc": "You are ChatGPT, a model trained by OpenAI that is designed to answer and solve any question people have, and can communicate with people in multiple languages."
 }
