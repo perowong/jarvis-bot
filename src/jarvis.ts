@@ -1,12 +1,15 @@
-import { log, Message, Sayable } from "wechaty";
+import { log } from "wechaty";
+import type { Message, Sayable } from "wechaty";
 import type { WechatyInterface } from "wechaty/impls";
+import HttpsProxyAgent from "https-proxy-agent";
 import { openai } from "./gpt.js";
 import { readConf } from "./conf.js";
 
 const conf = await readConf();
+const httpAgent = HttpsProxyAgent(`http://${conf["proxy"]}`);
 
 export interface JarvisParams {
-  msg: Message;
+  msg: Message
   bot?: WechatyInterface;
 }
 
@@ -35,16 +38,25 @@ export async function jarvis({ msg }: JarvisParams) {
   const toGptText = rest.join("");
 
   try {
-    const completion = await openai.createCompletion({
-      model: "gpt-3.5-turbo",
-      prompt: toGptText
-    });
-
-    replyMsg = completion.data.choices[0]?.text as string;
+    const completion = await openai.createChatCompletion(
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{
+          role: "user",
+          content: toGptText
+        }],
+        max_tokens: conf["conversationMaxTokens"]
+      },
+      {
+        httpAgent: httpAgent,
+        httpsAgent: httpAgent
+      }
+    );
+    replyMsg = completion.data.choices[0]?.message?.content as string;
   } catch (error: any) {
     if (error.response) {
       log.error(funcName, error.response.status);
-      log.error(funcName, error.response.data);
+      log.error(funcName, JSON.stringify(error.response.data));
     } else {
       log.error(funcName, error.message);
     }
