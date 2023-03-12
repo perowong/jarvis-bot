@@ -16,7 +16,7 @@
     "start": "cross-env NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" node src/bot.ts",
     "start:chat:info": "cross-env CHAT_LOG_MODE=info NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" node src/bot.ts",
     "start:wechat:padlocal": "cross-env WECHATY_LOG=verbose WECHATY_PUPPET=wechaty-puppet-padlocal npm start",
-    "gpt": "cross-env NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" node src/gpt.ts",
+    "gpt": "cross-env NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" node src/uiTerm.ts",
     "test": "cross-env NODE_OPTIONS=\"--no-warnings --loader=ts-node/esm\" tap \"src/**/*.spec.ts\""
   },
   "keywords": [],

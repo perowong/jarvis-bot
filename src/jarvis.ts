@@ -1,48 +1,27 @@
 import { log } from "wechaty";
-import type { Message, Sayable } from "wechaty";
-import type { WechatyInterface } from "wechaty/impls";
+import type { Sayable } from "wechaty";
 import { openai, httpAgent } from "./gpt.js";
 import { readConf } from "./conf.js";
 
 const conf = await readConf();
 
-export interface JarvisParams {
-  msg: Message
-  bot?: WechatyInterface;
-}
-
-export async function jarvis({ msg }: JarvisParams) {
+export async function jarvis(text: string) {
   const funcName = "[jarvis]";
-  const text = msg.text();
-  const room = msg.room();
-
-  if (!text.includes(conf["chatPrefix"])) {
-    return;
-  }
-
-  if (room) {
-    const topic = await room.topic();
-    if (conf["groupNameWhiteList"].includes(topic)) {
-      return;
-    }
-  }
-
-  const [namePrefix, ...rest] = text.split(conf["chatPrefix"]);
-  if (namePrefix !== "") {
-    return;
-  }
+  const s = text.split(conf["chatPrefix"]);
 
   let replyMsg: Sayable = "Something wrong";
-  const toGptText = rest.join("");
+  const toGptText = s.join("");
 
   try {
     const completion = await openai.createChatCompletion(
       {
         model: "gpt-3.5-turbo",
-        messages: [{
-          role: "user",
-          content: toGptText
-        }],
+        messages: [
+          {
+            role: "user",
+            content: toGptText
+          }
+        ],
         max_tokens: conf["conversationMaxTokens"]
       },
       {
@@ -50,7 +29,7 @@ export async function jarvis({ msg }: JarvisParams) {
         httpsAgent: httpAgent
       }
     );
-    replyMsg = completion.data.choices[0]?.message?.content as string;
+    replyMsg = completion.data.choices[0]?.message?.content as Sayable;
   } catch (error: any) {
     if (error.response) {
       log.error(funcName, error.response.status);
@@ -60,5 +39,5 @@ export async function jarvis({ msg }: JarvisParams) {
     }
   }
 
-  msg.say(conf["singleChatReplyPrefix"] + replyMsg);
+  return replyMsg;
 }

@@ -8,6 +8,7 @@ import PuppetPadlocal from "wechaty-puppet-padlocal";
 
 import { jarvis } from "./jarvis.js";
 import { readConf } from "./conf.js";
+import { validateWechatyMsg } from "./valid.js";
 
 const conf = await readConf();
 
@@ -36,8 +37,15 @@ function onLogout(user: Contact) {
 
 async function onMessage(msg: Message) {
   // log.info('StarterBot', msg.toString());
+  const isMsgValid = validateWechatyMsg(msg);
+  if (!isMsgValid) {
+    return;
+  }
 
-  jarvis({ msg, bot });
+  const reply = await jarvis(msg.text());
+  if (reply) {
+    bot.say(reply);
+  }
 }
 
 const bot = WechatyBuilder.build({
