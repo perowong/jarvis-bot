@@ -1,6 +1,6 @@
+import HttpsProxyAgent from "https-proxy-agent";
 import { Configuration, OpenAIApi } from "openai";
 import { readConf } from "./conf.js";
-import HttpsProxyAgent from "https-proxy-agent";
 
 const conf = await readConf();
 

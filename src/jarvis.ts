@@ -1,7 +1,7 @@
-import { log } from "wechaty";
 import type { Sayable } from "wechaty";
-import { openai, httpAgent } from "./gpt.js";
+import { log } from "wechaty";
 import { readConf } from "./conf.js";
+import { httpAgent, openai } from "./gpt.js";
 
 const conf = await readConf();
 

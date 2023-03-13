@@ -2,12 +2,12 @@
 
 import "dotenv/config.js";
 
-import { Contact, Message, ScanStatus, WechatyBuilder, log } from "wechaty";
 import qt from "qrcode-terminal";
+import { Contact, log, Message, ScanStatus, WechatyBuilder } from "wechaty";
 import PuppetPadlocal from "wechaty-puppet-padlocal";
 
-import { jarvis } from "./jarvis.js";
 import { readConf } from "./conf.js";
+import { jarvis } from "./jarvis.js";
 import { validateWechatyMsg } from "./valid.js";
 
 const conf = await readConf();
